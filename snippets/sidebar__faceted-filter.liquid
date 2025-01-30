@@ -159,12 +159,12 @@
                       name="{{ filter.min_value.param_name }}"
                       id="Filter-{{ filter.label }}-{{ forloop.index }}"
                       {% if filter.min_value.value -%}
-                        value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                        value="{{ filter.min_value.value | divided_by: 100 }}"
                       {%- endif %}
                       type="number"
                       placeholder="0"
                       min="0"
-                      max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                      max="{{ filter.range_max | divided_by: 100 }}"
                     >
                   </div>
                   <div class="faceted-filter-group-display__price-range-to">
@@ -180,15 +180,51 @@
                       name="{{ filter.max_value.param_name }}"
                       id="Filter-{{ filter.label }}-{{ forloop.index }}"
                       {% if filter.max_value.value -%}
-                        value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                        value="{{ filter.max_value.value | divided_by: 100 }}"
                       {%- endif %}
                       type="number"
-                      placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                      placeholder="{{ filter.range_max | divided_by: 100 }}"
                       min="0"
-                      max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                      max="{{ filter.range_max | divided_by: 100 }}"
                     >
                   </div>
                 </div>
+  
+                <div class="faceted-filter-group-display__price-range-input--range">
+                  <div class="range_container">
+  
+                    <div class="sliders_control">
+                      <input
+                        id="fromSlider"
+                        type="range"
+                        {% if filter.min_value.value -%}
+                          value="{{ filter.min_value.value | divided_by: 100 }}"
+                        {% else %}
+                          value="0"
+                        {% endif %}
+                        min="0"
+                        max="{{ filter.range_max | divided_by: 100 }}"
+                        steps="10" 
+                      />
+                      <input
+                        id="toSlider"
+                        type="range"
+                        {% if filter.max_value.value -%}
+                          value="{{ filter.max_value.value | divided_by: 100 }}"
+                        {% else %}
+                          value="{{ filter.range_max | divided_by: 100 }}"
+                        {% endif %}
+                        min="0"
+                        max="{{ filter.range_max | divided_by: 100 }}"
+                        steps="10"
+                      />
+                    </div>
+  
+                    <div id="scale" class="scale" data-steps="{{ filter.range_max | divided_by: 100 | divided_by: 5 }}"></div>
+                  </div>
+                </div>
+  
+                <script src="{{ 'custom-range-selector.js' | asset_url }}" defer></script>
   
                 <div class="faceted-filter-group-display__submit">
                   {%- assign label = 'collections.sidebar.apply_filter' | t | escape -%}
